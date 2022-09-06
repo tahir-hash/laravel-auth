@@ -1,9 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
-require __DIR__.'/auth.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -20,20 +18,20 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard',[UserController::class, 'index'])->middleware(['auth'])->name('dashboard');
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {
+    Route::get('/dashboard', [UserController::class,'index'])->name('dashboard');
+});
 
-/* Route::middleware(['auth','role:admin'])->group(function(){
-    Route::get('/private', function (){
-        return 'je suis un admin';
-    });
-}); */
 
-/* Route::middleware(['auth','role:client'])->group(function(){
-    Route::get('/public', function (){
-        return 'je suis un client';
-    });
-}); */
+//route for users save
+Route::middleware(['auth','role:admin'])->group(function(){
+    Route::get('users/create', [UserController::class,'create'])->name('users.create');
+    Route::post('users/create', [UserController::class,'store'])->name('users.store');
+    Route::post('users/create/{{id}}', [UserController::class,'store'])->name('users.update');
 
-Route::get('/public', [ClientController::class, 'index']);
-
+});
 
