@@ -36,14 +36,14 @@
                         <td> {{ $user->name }} </td>
                         <td> {{ $user->email }} </td>
                         <td class="flex">
-                            <form action="{{ route('users.update') }}"class="mr-3">
-                              <input type="hidden" name='update' value='{{ $user->id }}'>
+                            <a href="{{"edit/".$user->id}}" class="mr-3">
                                 <button type="submit"
                                     class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded btn-left">
                                     Modifier
                                 </button>
-                            </form>
-                            <form action="">
+                            </a>
+                            <form method="post" action="{{route('delete.user')}}">
+                                @csrf
                               <input name='update' type="hidden" value='{{ $user->id }}'>
                                 <button
                                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded btn-left">

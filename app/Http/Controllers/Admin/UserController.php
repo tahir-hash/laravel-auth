@@ -11,19 +11,25 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        
     }
-    public function index() {
-        $users= User::where('role','=','client')->get();
-       // dd($users);
-        return view('dashboard',['users'=>$users]);
-    }
-
-    public function create(){
-         return view('users.form-save');
+    public function index()
+    {
+        $users = User::where('role', '=', 'client')->where('isActivated', '=', true)
+            ->orderBy('id', 'desc')
+            ->get();
+        // dd($users);
+        return view('dashboard', ['users' => $users]);
     }
 
-    public function store(Request $request){
+    public function create()
+    {
+        return view('users.form-save', [
+            'user' => ''
+        ]);
+    }
+
+    public function store(Request $request)
+    {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -33,9 +39,44 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => 'client',
-            'password' => Hash::make('tahirMbaye21')
+            'password' => Hash::make('tahirMbaye21'),
+            'isActivated' => true
         ]);
         return redirect('/dashboard');
-       // dd($request);
+    }
+
+    public function showData($id)
+    {
+        $user = User::find($id);
+
+        return view('users.form-save', [
+            'user' => $user
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        //first method
+        /* $user= User::find($request->userId);
+        $user->name= $request->name;
+        $user->email= $request->email;
+        $user->save(); */
+
+        //second method
+        $user = User::find($request->userId);
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+        return redirect('/dashboard');
+    }
+
+    public function delete(Request $request)
+    {
+        $user = User::find($request->update);
+        $user->update([
+            'isActivated' => false
+        ]);
+        return redirect('/dashboard');
     }
 }
