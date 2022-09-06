@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -16,7 +18,7 @@ class UserController extends Controller
     {
         $users = User::where('role', '=', 'client')->where('isActivated', '=', true)
             ->orderBy('id', 'desc')
-            ->get();
+            ->paginate(3);
         // dd($users);
         return view('dashboard', ['users' => $users]);
     }
@@ -42,6 +44,7 @@ class UserController extends Controller
             'password' => Hash::make('tahirMbaye21'),
             'isActivated' => true
         ]);
+        Alert::success('Success', 'Enregistrement réussi !');
         return redirect('/dashboard');
     }
 

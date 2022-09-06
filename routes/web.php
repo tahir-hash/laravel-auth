@@ -19,6 +19,7 @@ Route::get('/', function () {
 });
 
 Route::middleware([
+    'role:admin',
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'

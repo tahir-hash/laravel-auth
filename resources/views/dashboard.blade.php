@@ -56,5 +56,7 @@
                 @endforeach
             </tbody>
         </table>
+        
+        {{ $users->links() }}
     </div>
 </x-app-layout>
