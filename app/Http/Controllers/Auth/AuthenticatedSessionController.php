@@ -36,10 +36,10 @@ class AuthenticatedSessionController extends Controller
         $role = Auth::user()->role;
                 switch ($role) {
                     case 'admin':
-                        return redirect('/dashboard');
+                        return redirect(RouteServiceProvider::HOME);
                         break;
                     case 'client':
-                        return redirect('/public');
+                        return redirect(RouteServiceProvider::CLIENT);
                         break;
 
                     default:

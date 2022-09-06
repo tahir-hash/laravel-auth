@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\client;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 require __DIR__.'/auth.php';
 
@@ -17,12 +18,9 @@ require __DIR__.'/auth.php';
 
 Route::get('/', function () {
     return view('auth.login');
-   
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard',[UserController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 /* Route::middleware(['auth','role:admin'])->group(function(){
     Route::get('/private', function (){
@@ -36,6 +34,6 @@ Route::get('/dashboard', function () {
     });
 }); */
 
-Route::get('/public', [client::class, 'index']);
+Route::get('/public', [ClientController::class, 'index']);
 
 

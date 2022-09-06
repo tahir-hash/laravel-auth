@@ -24,7 +24,7 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 $role = Auth::user()->role;
-                switch ($role) {
+               /*  switch ($role) {
                     case 'admin':
                         return redirect('/private');
                         break;
@@ -35,7 +35,7 @@ class RedirectIfAuthenticated
                     default:
                         return redirect('/home');
                         break;
-                }
+                } */
             }
         }
         return $next($request);
