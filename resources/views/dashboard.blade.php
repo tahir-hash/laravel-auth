@@ -10,7 +10,23 @@
             Add
         </button>
     </a>
+   <!-- The button to open modal -->
+   <label for="my-modal-3" class="btn-sm bg-blue-500  hover:bg-sky-700  btn modal-button">Uploads</label>
 
+   <!-- Put this part before </body> tag -->
+   <input type="checkbox" id="my-modal-3" class="modal-toggle" />
+   <div class="modal">
+       <div class="modal-box relative">
+           <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+           <h3 class="text-lg font-bold">Uploads un fichier</h3>
+           <form action="{{ route('users.storeUpload') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+               <input name='file' type="file" accept=".csv, text/csv" />
+               <input type="submit" placeholder="Type here" class="btn" />
+           </form>
+
+       </div>
+   </div>
     <div class=" mt-4 inline-block min-w-full shadow-md rounded-lg overflow-hidden">
         <table class="min-w-full leading-normal">
             <thead>
@@ -36,15 +52,15 @@
                         <td> {{ $user->name }} </td>
                         <td> {{ $user->email }} </td>
                         <td class="flex">
-                            <a href="{{"edit/".$user->id}}" class="mr-3">
+                            <a href="{{ 'edit/' . $user->id }}" class="mr-3">
                                 <button type="submit"
                                     class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded btn-left">
                                     Modifier
                                 </button>
                             </a>
-                            <form method="post" action="{{route('delete.user')}}">
+                            <form method="post" action="{{ route('delete.user') }}">
                                 @csrf
-                              <input name='update' type="hidden" value='{{ $user->id }}'>
+                                <input name='update' type="hidden" value='{{ $user->id }}'>
                                 <button
                                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded btn-left">
                                     Archiver
@@ -56,7 +72,7 @@
                 @endforeach
             </tbody>
         </table>
-        
+
         {{ $users->links() }}
     </div>
 </x-app-layout>
