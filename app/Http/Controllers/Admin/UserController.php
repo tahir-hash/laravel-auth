@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Str;
 use App\Models\User;
-use Rap2hpoutre\FastExcel\FastExcel;
-
 use League\Csv\Reader;
 use App\Imports\UserImport;
+
+use Illuminate\Support\Str;
+use App\Exports\UsersExport;
 use Illuminate\Http\Request;
+use App\Exports\FilterExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Bus;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use Rap2hpoutre\FastExcel\FastExcel;
 use RealRashid\SweetAlert\Facades\Alert;
 
 
@@ -91,6 +93,8 @@ class UserController extends Controller
 
     public function delete(Request $request)
     {
+
+        //  dd(url()->previous());
         if ($request->archive) {
             $user = User::find($request->archive);
             $user->update([
@@ -105,13 +109,21 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect('/dashboard');
+        return redirect(url()->previous());
     }
 
 
     public function storeUpload(Request $request)
     {
-        /* $csv = Reader::createFromPath($request->file('file')->getRealPath());
+        $request->validate([
+            'file' => ['required']
+        ]);
+        /* Laravel excel */
+        /*   $file= $request->file('file');
+		Excel::import(new UserImport,$file);
+	       return redirect('/dashboard'); */
+        /* csv league */
+        $csv = Reader::createFromPath($request->file('file')->getRealPath());
         $csv->setHeaderOffset(0);
         $user = [];
         foreach ($csv as $record) {
@@ -120,33 +132,28 @@ class UserController extends Controller
                 'email' => $record['email'],
                 'password' => Hash::make($record['password']),
             ];
+            if (count($user) == 10000) {
+                User::insert($user);
+            }
         }
-        User::insert($user);
+        /*  User::insert($user);
         $user = [];
-        return redirect('/dashboard'); */
-        $file = fopen($request->file('file')->getRealPath(), 'r');
+        return redirect('/dashboard');*/
+
+        //code php
+        /* $file = fopen($request->file('file')->getRealPath(), 'r');
         while ($csv = fgetcsv($file)) {
             User::create([
                 'name' => $csv[0],
                 'email' => $csv[1],
                 'password' => Hash::make($csv[2]),
+                'role' => 'client',
+                'isActivated' => true
             ]);
         }
 
         fclose($file);
-
-        /* $path = $request->file('file')->getRealPath();
-         $file = file($path);
-         $data = array_slice($file, 1);
-         $chunks= array_chunk($data,1000);
-         //dd($chunk[3]);
-         foreach($chunks as $chunk) {
-            User::create([
-                'name'=>$chunk[0],
-                'email'=>$chunk[1],
-                'password'=>Hash::make($chunk[2]),
-            ]);
-         } */
+        return redirect('/dashboard'); */
     }
 
     public function parseImport(Request $request)
@@ -155,5 +162,12 @@ class UserController extends Controller
         $file = file($path);
         $data = array_slice($file, 1);
         dd($data);
+    }
+
+    public function export()
+    {
+         return Excel::download(new UsersExport, 'users.csv');
+
+       
     }
 }

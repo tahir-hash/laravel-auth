@@ -35,6 +35,7 @@ Route::middleware(['auth','role:admin'])->group(function(){
     Route::get('edit/{id}', [UserController::class,'showData'])->name('show');
     Route::post('edit', [UserController::class,'update'])->name('update.user');
     Route::post('delete', [UserController::class,'delete'])->name('delete.user');
+    Route::get('users/export', [UserController::class, 'export'])->name('export');
 
 });
 

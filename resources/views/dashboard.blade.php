@@ -11,7 +11,11 @@
             echo $button;
         @endphp
         </label>
-
+        <label class="btn-sm bg-blue-500  hover:bg-sky-700  btn modal-button">
+            <a href="{{ route('export') }}">
+                Export
+            </a>
+        </label>
         <!-- The button to open modal -->
         <label for="my-modal-3" class="btn-sm bg-blue-500  hover:bg-sky-700  btn modal-button">Uploads</label>
 
@@ -108,6 +112,10 @@
                         Emails
                     </th>
                     <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Created_at
+                </th>
+                    <th
                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                         Actions
                     </th>
@@ -119,10 +127,14 @@
                     <tr class="bg-gray-50 border">
                         <td> {{ $user->name }} </td>
                         <td> {{ $user->email }} </td>
+                        <td> {{ $user->created_at->format('d/m/Y') }} </td>
+
                         <td class="flex">
                             @if ($user->isActivated == true)
                                 <label for="my-modal-4"
-                                    class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded btn-left mr-3 ">Modifier</label>
+                                    class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded btn-left mr-3 ">
+                                    Modifier
+                                </label>
 
                                 <form class="mr-3" method="post" action="{{ route('delete.user') }}">
                                     @csrf
