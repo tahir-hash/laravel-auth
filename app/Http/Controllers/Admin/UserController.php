@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Str;
 use App\Models\User;
+use Rap2hpoutre\FastExcel\FastExcel;
+
 use League\Csv\Reader;
 use App\Imports\UserImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Bus;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -25,9 +29,9 @@ class UserController extends Controller
 
         // dd($users);
         if (Auth::user()->role == 'admin') {
-            $users = User::where('role', '=', 'client')->where('isActivated', '=', true)
+            $users = User::where('role', '=', 'client')
                 ->orderBy('id', 'desc')
-                ->paginate(3);
+                ->paginate(5);
             return view('dashboard', ['users' => $users]);
         } else {
             return view('dashboardClient');
@@ -87,59 +91,62 @@ class UserController extends Controller
 
     public function delete(Request $request)
     {
-        $user = User::find($request->update);
-        $user->update([
-            'isActivated' => false
-        ]);
+        if ($request->archive) {
+            $user = User::find($request->archive);
+            $user->update([
+                'isActivated' => false
+            ]);
+        }
+
+        if ($request->desarchive) {
+            $user = User::find($request->desarchive);
+            $user->update([
+                'isActivated' => true
+            ]);
+        }
+
         return redirect('/dashboard');
     }
 
 
-    //public function storeUpload(Request $request)
-    //{
-    //    $file = $request->file('file');
-    //    dd($file);
-    //    // Excel::import(new UserImport,$file);
-    //    Excel::filter('chunk')->load(database_path($file->getRealPath()))->chunk(250, function ($results) {
-    //        foreach ($results as $row) {
-    //            $user = User::create([
-    //                'name' => $row[0],
-    //                'email' => $row[1],
-    //                'password' => Hash::make($row[2]),
-    //            ]);
-    //        }
-    //    });
-    //    /* $file= fopen($request->file('file')->getRealPath(), 'r');
-    //     while($csv=fgetcsv($file)){
-    //        User::create([
-    //            'name'=>$csv[0],
-    //            'email'=>$csv[1],
-    //            'password'=>Hash::make($csv[2]),
-    //        ]);
-    //     }
-    //
-    //     fclose($file); */
-    //    Alert::success('Success', 'Enregistrement réussi !');
-    //    return redirect('/dashboard');
-    //}
-
     public function storeUpload(Request $request)
     {
-        $csv = Reader::createFromPath($request->file('file')->getRealPath());
+        /* $csv = Reader::createFromPath($request->file('file')->getRealPath());
         $csv->setHeaderOffset(0);
         $user = [];
         foreach ($csv as $record) {
-            $user[]=[
+            $user[] = [
                 'name' => $record['name'],
                 'email' => $record['email'],
                 'password' => Hash::make($record['password']),
-            ]; 
+            ];
         }
-        DB::table('users')->insert($user);
-      /* $path = $request->file('file')->getRealPath();
-        $file= file($path);
-        $data = array_slice($file, 1); */
-        
+        User::insert($user);
+        $user = [];
+        return redirect('/dashboard'); */
+        $file = fopen($request->file('file')->getRealPath(), 'r');
+        while ($csv = fgetcsv($file)) {
+            User::create([
+                'name' => $csv[0],
+                'email' => $csv[1],
+                'password' => Hash::make($csv[2]),
+            ]);
+        }
+
+        fclose($file);
+
+        /* $path = $request->file('file')->getRealPath();
+         $file = file($path);
+         $data = array_slice($file, 1);
+         $chunks= array_chunk($data,1000);
+         //dd($chunk[3]);
+         foreach($chunks as $chunk) {
+            User::create([
+                'name'=>$chunk[0],
+                'email'=>$chunk[1],
+                'password'=>Hash::make($chunk[2]),
+            ]);
+         } */
     }
 
     public function parseImport(Request $request)

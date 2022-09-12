@@ -214,6 +214,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'FastExcel' => Rap2hpoutre\FastExcel\Facades\FastExcel::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
