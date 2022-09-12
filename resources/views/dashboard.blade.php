@@ -5,16 +5,27 @@
         </h2>
     </x-slot>
     <h1 class="text-center mt-4 mb-2 text-2xl uppercase ">Liste des users</h1>
+
+    {{-- form export --}}
+    <form class="flex justify-around mb-5" action="{{ route('export') }}">
+        @csrf
+        <div>
+            <label class="label" for="">Date Debut</label>
+            <input type="date" name="dateD" class="input max-w-xs" />
+        </div>
+        <div>
+            <label class="label" for="">Date Fin</label>
+            <input type="date" name="dateF" class="input max-w-xs" />
+        </div>
+        <label class="btn-sm bg-blue-500  hover:bg-sky-700  btn modal-button ">
+            Export
+        </label>
+    </form>
     <div class="flex justify-around">
         <label for="my-modal-4" class="btn-sm bg-blue-500  hover:bg-sky-700  btn modal-button"> @php
             $button = 'Add';
             echo $button;
         @endphp
-        </label>
-        <label class="btn-sm bg-blue-500  hover:bg-sky-700  btn modal-button">
-            <a href="{{ route('export') }}">
-                Export
-            </a>
         </label>
         <!-- The button to open modal -->
         <label for="my-modal-3" class="btn-sm bg-blue-500  hover:bg-sky-700  btn modal-button">Uploads</label>
@@ -112,9 +123,9 @@
                         Emails
                     </th>
                     <th
-                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    Created_at
-                </th>
+                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Created_at
+                    </th>
                     <th
                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                         Actions
@@ -162,6 +173,6 @@
             </tbody>
         </table>
 
-        {{ $users->links() }}
+        {{ $users->links('pagination::tailwind') }}
     </div>
 </x-app-layout>

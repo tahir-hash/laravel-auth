@@ -164,8 +164,9 @@ class UserController extends Controller
         dd($data);
     }
 
-    public function export()
+    public function export(Request $request)
     {
+        dd($request->dateD);
          return Excel::download(new UsersExport, 'users.csv');
 
        

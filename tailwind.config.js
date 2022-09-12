@@ -1,35 +1,39 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
+        "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
+        "./storage/framework/views/*.php",
+        "./resources/views/**/*.blade.php",
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
-        "./resources/**/*.vue",
-      ],
+        "./resources/**/*.vue"
+    ],
 
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
+                sans: ["Nunito", ...defaultTheme.fontFamily.sans],
             },
         },
     },
 
-    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography'),require("daisyui")],
+    plugins: [
+        require("@tailwindcss/forms"),
+        require("@tailwindcss/typography"),
+        require("daisyui")
+    ],
 
-     // daisyUI config (optional)
-  daisyui: {
-    styled: true,
-    themes: true,
-    base: true,
-    utils: true,
-    logs: true,
-    rtl: false,
-    prefix: "",
-    darkTheme: "dark",
-  }
+    // daisyUI config (optional)
+    daisyui: {
+        styled: true,
+        themes: true,
+        base: true,
+        utils: true,
+        logs: true,
+        rtl: false,
+        prefix: "",
+        darkTheme: "dark",
+    },
 };
