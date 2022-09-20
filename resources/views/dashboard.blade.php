@@ -7,19 +7,19 @@
     <h1 class="text-center mt-4 mb-2 text-2xl uppercase ">Liste des users</h1>
 
     {{-- form export --}}
-    <form class="flex justify-around mb-5" action="{{ route('export') }}">
+    <form class="flex justify-around mb-5" action="{{ route('export') }}" method="GET" enctype="multipart/form-data">
         @csrf
         <div>
             <label class="label" for="">Date Debut</label>
-            <input type="date" name="dateD" class="input max-w-xs" />
+            <input type="datetime-local" name="dateD" class="input max-w-xs" />
         </div>
         <div>
             <label class="label" for="">Date Fin</label>
-            <input type="date" name="dateF" class="input max-w-xs" />
+            <input type="datetime-local" name="dateF" class="input max-w-xs" />
         </div>
-        <label class="btn-sm bg-blue-500  hover:bg-sky-700  btn modal-button ">
+        <button type="submit" class="btn-sm bg-blue-500  hover:bg-sky-700  btn modal-button ">
             Export
-        </label>
+        </button>
     </form>
     <div class="flex justify-around">
         <label for="my-modal-4" class="btn-sm bg-blue-500  hover:bg-sky-700  btn modal-button"> @php
@@ -60,18 +60,18 @@
 
 
             </h3>
-            <form method="POST">
+            <form method="POST" action="{{route('users.store')}}">
                 @csrf
 
                 <div>
                     <x-jet-label for="name" value="{{ __('Name') }}" />
                     <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" required
-                        autofocus autocomplete="name" />
+                      :value="old('name')"  autofocus autocomplete="name" />
                 </div>
 
                 <div class="mt-4">
                     <x-jet-label for="email" value="{{ __('Email') }}" />
-                    <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" required />
+                    <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
                 </div>
                 @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
                     <div class="mt-4">
